@@ -7,27 +7,22 @@ namespace Quartetcom\Nagoyaphp17;
 class App
 {
     /**
-     * @var TripleNumberSpec
+     * @var NonTripleNumberFinderResolver
      */
-    private $spec;
+    private $finderResolver;
 
     /**
-     * @param TripleNumberSpec $spec
+     * @param NonTripleNumberFinderResolver $finderResolver
      */
-    public function __construct(TripleNumberSpec $spec)
+    public function __construct(NonTripleNumberFinderResolver $finderResolver)
     {
-        $this->spec = $spec;
+        $this->finderResolver = $finderResolver;
     }
 
     public function run(string $input)
     {
-        $cursor = intval($input);
+        $number = intval($input);
 
-        do {
-            $cursor++;
-            $converted = sprintf('%b', $cursor);
-        } while ($this->spec->isSatisfiedBy($converted));
-
-        return (string)$cursor;
+        return (int)$this->finderResolver->resolve($number)->find($number);
     }
 }

@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Quartetcom\Nagoyaphp17;
 
 use PHPUnit\Framework\TestCase;
+use Quartetcom\Nagoyaphp17\NonTripleNumberFinder\Contains000OnlyOnceAndNotContains111Nor00011;
+use Quartetcom\Nagoyaphp17\NonTripleNumberFinder\FallbackFinder;
+use Quartetcom\Nagoyaphp17\NonTripleNumberFinder\LessThan110;
 
 class AppTest extends TestCase
 {
@@ -69,6 +72,16 @@ class AppTest extends TestCase
 
     private function getSUT()
     {
-        return new App(new TripleNumberSpec());
+        return new App($this->getResolver());
+    }
+
+    private function getResolver()
+    {
+        $resolver = new NonTripleNumberFinderResolver();
+        $resolver->addNonTripleNumberFinder(new LessThan110());
+        $resolver->addNonTripleNumberFinder(new Contains000OnlyOnceAndNotContains111Nor00011());
+        $resolver->addNonTripleNumberFinder(new FallbackFinder(new TripleNumberSpec()));
+
+        return $resolver;
     }
 }
